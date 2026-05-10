@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Мои подарки</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:white;
+    text-align:center;
+}
+
+.page{
+    display:none;
+}
+
+.active{
+    display:block;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:repeat(2,200px);
+    gap:30px;
+    justify-content:center;
+    margin-top:40px;
+}
+
+.box{
+    width:200px;
+    height:200px;
+    border:3px solid black;
+    border-radius:20px;
+    font-size:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.box:hover{
+    background:#f0f0f0;
+    transform:scale(1.05);
+}
+
+button{
+    padding:10px;
+    margin-top:10px;
+    cursor:pointer;
+}
+</style>
+
+<script>
+function showPage(id){
+    document.querySelectorAll(".page").forEach(p=>{
+        p.classList.remove("active");
+    });
+    document.getElementById(id).classList.add("active");
+}
+
+/* ---- идеи подарков ---- */
+
+function saveIdea(){
+    let text=document.getElementById("idea").value;
+
+    if(text==="") return;
+
+    let ideas=JSON.parse(localStorage.getItem("ideas"))||[];
+    ideas.push(text);
+
+    localStorage.setItem("ideas",JSON.stringify(ideas));
+
+    document.getElementById("idea").value="";
+    showIdeas();
+}
+
+function showIdeas(){
+    let list=document.getElementById("list");
+    list.innerHTML="";
+
+    let ideas=JSON.parse(localStorage.getItem("ideas"))||[];
+
+    ideas.forEach(i=>{
+        let li=document.createElement("li");
+        li.textContent=i;
+        list.appendChild(li);
+    });
+}
+
+window.onload=()=>{
+    showPage("main");
+    showIdeas();
+};
+</script>
+
+</head>
+
+<body>
+
+<!-- ГЛАВНАЯ -->
+<div id="main" class="page active">
+
+<h1>🎁 Мои подарки</h1>
+
+<div class="container">
+
+<div class="box" onclick="showPage('fishing')">🎣</div>
+<div class="box" onclick="showPage('camping')">🏕️</div>
+<div class="box" onclick="showPage('home')">☔</div>
+<div class="box" onclick="showPage('ideas')">💡</div>
+
+</div>
+
+</div>
+
+<!-- РЫБАЛКА -->
+<div id="fishing" class="page">
+<h1>🎣 Рыбалка</h1>
+
+<p>Тут будут вещи для рыбалки.</p>
+
+<button onclick="showPage('main')">⬅ Назад</button>
+</div>
+
+<!-- КЕМПИНГ -->
+<div id="camping" class="page">
+<h1>🏕️ Кемпинг</h1>
+
+<p>Тут будут вещи для походов.</p>
+
+<button onclick="showPage('main')">⬅ Назад</button>
+</div>
+
+<!-- БЫТОВОЕ -->
+<div id="home" class="page">
+<h1>☔ Бытовое</h1>
+
+<p>Полезные вещи для дома.</p>
+
+<button onclick="showPage('main')">⬅ Назад</button>
+</div>
+
+<!-- СВОИ ВАРИАНТЫ -->
+<div id="ideas" class="page">
+
+<h1>💡 Свои варианты подарков</h1>
+
+<input id="idea" placeholder="Напишите идею подарка">
+<br>
+<button onclick="saveIdea()">Добавить</button>
+
+<h3>Предложения:</h3>
+<ul id="list"></ul>
+
+<button onclick="showPage('main')">⬅ Назад</button>
+
+</div>
+
+</body>
+</html>
